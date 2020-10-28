@@ -1,5 +1,4 @@
-public class Insertion {
-
+public class Shell {
     private static boolean less(Comparable v, Comparable w) {
         return v.compareTo(w) < 0;
     }
@@ -29,24 +28,25 @@ public class Insertion {
     public static void sort(Comparable[] a) {
         // Sort a[] into increasing order.
         int N = a.length;
-        for (int i = 1; i < N; i++) {
-            // for (int j = i; j > 0 && less(a[j], a[j - 1]); j--)
-            //     exch(a, j, j - 1);
-
-            int j = i;
-            Comparable P = a[j];
-            while (j > 0 && less(a[j], a[j - 1])) {
-                a[j] = a[j - 1];
-                j--;
+        int h = 1;
+        while (h < N / 3) h = 3 * h + 1; // 1, 4 , 13, 40, 121, 364
+        while (h >= 1) {
+            // h-sort the array
+            for (int i = h; i < N; i++) {
+                for (int j = i; j >= h && less(a[j], a[j - h]); j -= h) {
+                    exch(a, j, j - h);
+                }
+                // System.out.println("i: " + i + "h:" + h);
             }
-            a[j] = P;
+            h = h / 3;
+
         }
         assert isSorted(a);
     }
 
     public static void main(String[] args) {
         String[] a = StdIn.readAllStrings();
-        Selection.sort(a);
+        Shell.sort(a);
         show(a);
     }
 }
